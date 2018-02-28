@@ -21,13 +21,13 @@ WordController.getOne = async  () => {
 
 WordController.getWord = async (obj) => {
   var query = { "group": obj.group, "count": ((obj.count>0)? obj.count: {$gt: obj.count} )  };
-  var random = Math.floor(Math.random() * max);
-
+  
   try {
     var max = await Word.count(query).exec();
+    var random = Math.floor(Math.random() * max);
     return await Word.findOne(query).skip(random).exec();
   } catch (err) {
-    return 'ERROR: ' + err;
+    return {};
   }
 };
 
