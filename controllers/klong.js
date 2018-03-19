@@ -1,9 +1,13 @@
 var KlongAPI = {};
+var wordcut = require("wordcut");
+wordcut.init();
 
 
 KlongAPI.getGroup = function(word) {
-
     var Klong;
+
+    // 1st-Seg
+    word = wordcut.cut(word).split('|').pop();
 
     if (word.match(/^ฤกษ์$/)) {
         word = word.replace(/ฤกษ์/g, 'เลิก');
@@ -20,9 +24,13 @@ KlongAPI.getGroup = function(word) {
     word = word.replace(/(.)์/g, '');
     word = word.replace(/(่|้|๊|๋)/g, '');
 
+    // 2nd-seg
+    word = wordcut.cut(word).split('|').pop();
+
+    if(!word) return null;
     if (word.length < 2) return null;
 
-
+    
     ///////// SPECIAL
     if (word.match(/เวลา$/)) Klong = "อา";
     else if (word.match(/เพลา$/)) Klong = "เอา";
@@ -260,7 +268,7 @@ KlongAPI.getGroup = function(word) {
     else if (word.match(/^(อ|ย|ว)ม$/)) Klong = "อม";
     else if (word.match(/^(อ|ย|ว)ง$/)) Klong = "อง";
 
-    else Klong = "ไม่มีนะจ๊ะ";
+    else return null;
 
     return Klong;
 }

@@ -21,6 +21,7 @@ mongoose.connect('mongodb://ds149138.mlab.com:49138/kj',options)
 var index = require('./routes/index');
 var users = require('./routes/users');
 var api = require('./routes/api');
+var wiki = require('./routes/wiki');
 
 var app = express();
 
@@ -40,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/api', api);
+app.use('/wiki', wiki);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

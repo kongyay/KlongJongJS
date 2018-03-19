@@ -5,11 +5,30 @@ var wordController = require('../controllers/wordController');
 var fs = require('fs');
 
 
+
 router.get('/', function (req, res, next) {
   
 });
 
-router.get('/find', async (req, res, next) => {
+
+
+router.get('/find/:word', async (req, res, next) => {
+ 
+    var word = req.params.word;
+    var json = req.query.json;
+
+    var group = KlongAPI.getGroup(word);
+    var data = await wordController.getWord({name:word,group:group,count:0,tag:[]});
+    if(data == null)
+        data =  {"name":"*ไม่มีคำตอบ*"};
+
+    if(!json)
+        res.render('index', { title: word , data : data });
+    else
+        res.json(data);
+});
+
+router.get(/find$/, async (req, res, next) => {
   var word = req.query.word;
   var group = KlongAPI.getGroup(word);
   var data = await wordController.getWord({name:word,group:group,count:0,tag:[]});
@@ -18,21 +37,6 @@ router.get('/find', async (req, res, next) => {
       data =  {"name":"*ไม่มีคำตอบ*"};
 
   res.json(data);
-});
-
-router.get('/find/:word', async (req, res, next) => {
-    var word = req.params.word;
-    var json = req.query.json;
-    var group = KlongAPI.getGroup(word);
-    var data = await wordController.getWord({name:word,group:group,count:0,tag:[]});
-
-    if(data == null)
-        data =  {"name":"*ไม่มีคำตอบ*"};
-
-    if(!json)
-        res.render('index', { title: word , data : data });
-    else
-        res.json(data);
 });
 
 router.get('/group/:word', function (req, res, next) {
